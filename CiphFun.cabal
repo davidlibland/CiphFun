@@ -1,0 +1,80 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: b10e1555d45b687356e9aad603ab21db9e1bd812ab0045e12e1b670df8d89fe0
+
+name:           CiphFun
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/Github username here/CiphFun#readme>
+homepage:       https://github.com/Github username here/CiphFun#readme
+bug-reports:    https://github.com/Github username here/CiphFun/issues
+author:         Author name here
+maintainer:     Author email here
+copyright:      2019 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/Github username here/CiphFun
+
+library
+  exposed-modules:
+      Cipher
+      RailFence
+      Utils
+  other-modules:
+      Paths_CiphFun
+  hs-source-dirs:
+      src
+  build-depends:
+      QuickCheck ==2.14.2
+    , base >=4.7 && <5
+    , hspec ==2.7.8
+    , mtl ==2.2.2
+    , random ==1.1
+    , split ==0.2.3.4
+  default-language: Haskell2010
+
+executable CiphFun-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_CiphFun
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      CiphFun
+    , QuickCheck ==2.14.2
+    , base >=4.7 && <5
+    , hspec ==2.7.8
+    , mtl ==2.2.2
+    , random ==1.1
+    , split ==0.2.3.4
+  default-language: Haskell2010
+
+test-suite CiphFun-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      RailFenceSpec
+      Paths_CiphFun
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      CiphFun
+    , QuickCheck ==2.14.2
+    , base >=4.7 && <5
+    , hspec ==2.7.8
+    , mtl ==2.2.2
+    , random ==1.1
+    , split ==0.2.3.4
+  default-language: Haskell2010
