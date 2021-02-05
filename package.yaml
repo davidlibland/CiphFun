@@ -24,6 +24,8 @@ dependencies:
 - random == 1.1
 - mtl == 2.2.2
 - split == 0.2.3.4
+- yaml == 0.11.5.0
+- optparse-applicative == 0.15.1.0
 - hspec == 2.7.8
 - QuickCheck == 2.14.2
 

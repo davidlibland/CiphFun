@@ -1,8 +1,9 @@
-module Utils (padC, padR, padM, prepString, padPrepStringC, padPrepStringM) where
+module Utils (padC, padR, padM, prepString, padPrepStringC, padPrepStringM, oddEven, computeLength) where
   
 import System.Random
 import Control.Monad.State 
 import Data.Char (toUpper)
+import Numeric.Natural (Natural)
 
 padFromStream :: [Char] -> Int -> String -> String
 padFromStream nullStream n msg = msg ++ take (n - length msg) nullStream
@@ -32,3 +33,16 @@ padPrepStringC n nulls = prepString  . padC nulls n . prepString
 
 padPrepStringM :: Int -> [Char] -> String -> State StdGen String
 padPrepStringM n nulls = fmap prepString . padM nulls n . prepString
+
+oddEven :: [a] -> ([a], [a])
+oddEven [] = ([], [])
+oddEven [x] = ([x], [])
+oddEven (x:y:xs) = let (odds, evens) = oddEven xs in (x:odds, y:evens)
+      
+-- Computes the length of the encoded message. It must be the smallest
+-- multiple of the multiples larger than size
+computeLength :: [Natural] -> Int -> Int
+computeLength multiples size = let 
+  bSize = foldl lcm 1 $ map fromIntegral multiples  
+  extra = size `mod` bSize
+  in if extra == 0 then size else size + bSize - extra
