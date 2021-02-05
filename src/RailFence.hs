@@ -18,13 +18,14 @@ instance Cipher RailFenceConfig where
     prepedMsg = evalState (padPrepStringM n (nulls config)  msg) (mkStdGen (seed config))
     (odds, evens) = oddEven prepedMsg
     in Right $ chunksOf (fromIntegral $ blocksize config) (odds++evens)
-  decode config blocks = let
-    encodedMsgM = if all (\block -> length block == fromIntegral (blocksize config)) blocks
-      then Right $ concat blocks else Left "Invalid Message Block sizes"
-    zippedMsg = fmap (\encodedMsg -> 
-        let 
-          (odds, evens) = splitAt (length encodedMsg `div` 2) encodedMsg
-        in zip odds evens) encodedMsgM
-    unFence [] = []
-    unFence ((o, e):xs) = o:e: unFence xs
-    in fmap unFence zippedMsg
+  decode config blocks = do
+      encodedMsg <- if all (\block -> length block == fromIntegral (blocksize config)) blocks 
+        then Right $ concat blocks
+        else Left "Invalid Message Block sizes"
+      if even (length encodedMsg) then Right () else Left "Encoded message must have even length"
+      let (odds, evens) = splitAt (length encodedMsg `div` 2) encodedMsg
+      let zippedMsg = zip odds evens
+      return $ let 
+          unFence [] = []
+          unFence ((o, e):xs) = o:e: unFence xs
+        in unFence zippedMsg

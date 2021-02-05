@@ -15,10 +15,6 @@ instance Arbitrary Natural where
 spec :: Spec
 spec = do
   describe "normalizing messages for ciphers" $ do
---    it "handles hi there" $
---      decode standardRailFenceConfig (encode standardRailFenceConfig "hi there")
---      `shouldMatch`
---      "hi there"
     prop "padC produces the correct size message" $ \msg -> \(Positive n) ->
       length (padC "xywz" n msg)
         `shouldBe`
@@ -38,3 +34,6 @@ spec = do
       prop "produces a multiple of all the multiples" $ \multiples -> \n ->
         let bSize = foldl lcm 1 $ map fromIntegral (multiples :: [Natural]) in
         (computeLength multiples n) `mod` bSize == 0
+      prop "is the smallest multiple no smaller than the size" $ \multiples -> \n ->
+        let bSize = foldl lcm 1 $ map fromIntegral (multiples :: [Natural]) in
+        (computeLength multiples n) < n + bSize
