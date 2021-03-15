@@ -1,8 +1,9 @@
-module Utils (padC, padR, padM, prepString, padPrepStringC, padPrepStringM, oddEven, computeLength) where
+module Utils (padC, padR, padM, prepString, padPrepStringC, padPrepStringM, oddEven, computeLength, transpose, sortAgainst, ranks, invRanks) where
   
 import System.Random
 import Control.Monad.State 
 import Data.Char (toUpper)
+import Data.List (sortOn)
 import Numeric.Natural (Natural)
 
 padFromStream :: [Char] -> Int -> String -> String
@@ -38,7 +39,24 @@ oddEven :: [a] -> ([a], [a])
 oddEven [] = ([], [])
 oddEven [x] = ([x], [])
 oddEven (x:y:xs) = let (odds, evens) = oddEven xs in (x:odds, y:evens)
-      
+
+
+transpose :: [[a]] -> [[a]]
+transpose [] = []
+transpose [x] = map (: []) x
+transpose (x:xs) = zipWith (:) x (transpose xs)
+
+sortAgainst :: Ord a => [a] -> [b] -> [b]
+sortAgainst ixs ys = let
+    sortedTuples = sortOn fst $ zip ixs ys
+  in map snd sortedTuples
+  
+invRanks :: Ord a => [a] -> [Int]
+invRanks xs = sortAgainst xs [1..]
+
+ranks :: Ord a => [a] -> [Int]
+ranks = invRanks . invRanks
+
 -- Computes the length of the encoded message. It must be the smallest
 -- multiple of the multiples larger than size
 computeLength :: [Natural] -> Int -> Int

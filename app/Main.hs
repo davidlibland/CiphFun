@@ -4,6 +4,7 @@ import Options.Applicative
 import Data.Semigroup ((<>))
 
 import RailFence
+import CodeWord
 import Cipher
 
 data EncodeOrDecode = Encode | Decode deriving Show
@@ -72,4 +73,6 @@ printResult (Right msg) = print msg
 runCommand :: CliOptions -> IO ()
 runCommand (CliOptions Encode RailFence _ msg) = printResult $ unwords <$> encode standardRailFenceConfig msg
 runCommand (CliOptions Decode RailFence _ msg) = printResult $ decode standardRailFenceConfig $ words msg
+runCommand (CliOptions Encode CodeWord _ msg) = printResult $ unwords <$> encode standardCodeWordConfig msg
+runCommand (CliOptions Decode CodeWord _ msg) = printResult $ decode standardCodeWordConfig $ words msg
 runCommand x = print x

@@ -9,6 +9,9 @@ import Numeric.Natural (Natural)
 
 data RailFenceConfig = RailFenceConfig {blocksize :: Natural, nulls :: String, seed :: Int} deriving (Show)
 
+blocksize_ :: RailFenceConfig -> Int
+blocksize_ = fromIntegral . blocksize
+
 standardRailFenceConfig :: RailFenceConfig
 standardRailFenceConfig = RailFenceConfig 4 "wkvxzjq" 3
 
@@ -17,9 +20,9 @@ instance Cipher RailFenceConfig where
     n = computeLength [2, blocksize config] (length $ prepString msg)
     prepedMsg = evalState (padPrepStringM n (nulls config)  msg) (mkStdGen (seed config))
     (odds, evens) = oddEven prepedMsg
-    in Right $ chunksOf (fromIntegral $ blocksize config) (odds++evens)
+    in Right $ chunksOf (blocksize_ config) (odds++evens)
   decode config blocks = do
-      encodedMsg <- if all (\block -> length block == fromIntegral (blocksize config)) blocks 
+      encodedMsg <- if all (\block -> length block == blocksize_ config) blocks 
         then Right $ concat blocks
         else Left "Invalid Message Block sizes"
       if even (length encodedMsg) then Right () else Left "Encoded message must have even length"

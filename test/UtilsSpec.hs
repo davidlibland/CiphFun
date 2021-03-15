@@ -5,6 +5,7 @@ import Test.Hspec
 import Test.Hspec.QuickCheck
 import Test.QuickCheck
 import Numeric.Natural
+import Data.List (sort)
 
 import RailFence
 import Utils
@@ -37,3 +38,26 @@ spec = do
       prop "is the smallest multiple no smaller than the size" $ \multiples -> \n ->
         let bSize = foldl lcm 1 $ map fromIntegral (multiples :: [Natural]) in
         (computeLength multiples n) < n + bSize
+  describe "transpose" $ do
+      prop "is reversible" $ \(Positive n) -> \(Positive m) -> \letters -> let
+          letterStream :: String
+          letterStream = cycle (letters++"cat")
+          matrix = [[letterStream !! (i+j)| i <- [1 .. m]]|j<- [1..n]]
+        in (transpose . transpose) matrix == matrix
+      it "is correct on [[1,2],[3,4]]" $
+        transpose [[1,2], [3,4]] `shouldBe` [[1,3], [2,4]]
+  describe "sortAgainst" $ do
+      it "is correct on a simple example" $
+        sortAgainst [3,2,4,1] "abcd" `shouldBe` "dbac"
+      prop "works correctly" $ \lst ->
+         sortAgainst lst lst == sort (lst :: String)
+  describe "invRanks" $ do
+      it "is correct on a simple example" $
+        invRanks "bhue" `shouldBe` [1,4,2,3]
+      prop "works correctly" $ \lst ->
+         sortAgainst (invRanks lst) (sort lst) == (lst :: String)
+  describe "ranks" $ do
+      it "is correct on a simple example" $
+        ranks "bhue" `shouldBe` [1,3,4,2]
+      prop "works correctly" $ \lst ->
+         sortAgainst (ranks lst) lst == sort (lst :: String)

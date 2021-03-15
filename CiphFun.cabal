@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7dd877a8bd52a209aa5184e58df52f5a30cc4a9df0b27a49e7d5cae8b561687f
+-- hash: cf21c20ca0393695a66bb1442c8477ab125954cb6492d492ac992e3ab68cd788
 
 name:           CiphFun
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Cipher
+      CodeWord
       RailFence
       Utils
   other-modules:
@@ -68,6 +69,7 @@ test-suite CiphFun-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      CodeWordSpec
       RailFenceSpec
       UtilsSpec
       Paths_CiphFun

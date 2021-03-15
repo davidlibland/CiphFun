@@ -1,11 +1,1 @@
 {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
---module Main where
---
---import Test.Hspec
---import RailFenceSpec(rfSpec)
---import UtilsSpec(utilSpec)
---
---main :: IO ()
---main = do
---  hspec utilSpec
---  hspec rfSpec 
