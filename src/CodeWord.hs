@@ -1,13 +1,17 @@
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
 module CodeWord (CodeWordConfig(CodeWordConfig), blocksize, standardCodeWordConfig) where
 
 import Cipher
 import Data.List.Split (chunksOf)
+import Data.Yaml (FromJSON)
+import GHC.Generics (Generic)
 import Utils (padPrepStringM, computeLength, prepString, sortAgainst, invRanks, transpose)
 import System.Random (mkStdGen)
 import Control.Monad.State.Lazy (evalState)
 import Numeric.Natural (Natural)
 
-data CodeWordConfig = CodeWordConfig {codeword:: String, blocksize :: Natural, nulls :: String, seed :: Int} deriving (Show)
+data CodeWordConfig = CodeWordConfig {codeword:: String, blocksize :: Natural, nulls :: String, seed :: Int} deriving (Show, Generic, FromJSON)
 
 blocksize_ = fromIntegral . blocksize
 

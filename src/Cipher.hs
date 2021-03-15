@@ -1,6 +1,6 @@
 module Cipher (Cipher, encode, decode) where
 
-type ErrorMsg = String  
+type ErrorMsg = String
   
 -- A cipher includes an encoder and a decoder, parameterized by a common config (such as the code word).
 class Cipher config where

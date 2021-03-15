@@ -1,13 +1,17 @@
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
 module RailFence (RailFenceConfig(RailFenceConfig), blocksize, nulls, standardRailFenceConfig) where
 
 import Cipher
 import Data.List.Split (chunksOf)
+import Data.Yaml (FromJSON)
+import GHC.Generics (Generic)
 import Utils (padPrepStringM, oddEven, computeLength, prepString)
 import System.Random (mkStdGen)
 import Control.Monad.State.Lazy (evalState)
 import Numeric.Natural (Natural)
 
-data RailFenceConfig = RailFenceConfig {blocksize :: Natural, nulls :: String, seed :: Int} deriving (Show)
+data RailFenceConfig = RailFenceConfig {blocksize :: Natural, nulls :: String, seed :: Int} deriving (Show, Generic, FromJSON)
 
 blocksize_ :: RailFenceConfig -> Int
 blocksize_ = fromIntegral . blocksize

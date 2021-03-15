@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cf21c20ca0393695a66bb1442c8477ab125954cb6492d492ac992e3ab68cd788
+-- hash: 9c7831e3bab8d5cdd4f79c4545e8e96f8e43d74f50b46741f19fff44a81155a7
 
 name:           CiphFun
 version:        0.1.0.0
@@ -38,6 +38,7 @@ library
   build-depends:
       QuickCheck ==2.14.2
     , base >=4.7 && <5
+    , bytestring ==0.10.12.0
     , hspec ==2.7.8
     , mtl ==2.2.2
     , optparse-applicative ==0.15.1.0
@@ -57,6 +58,7 @@ executable CiphFun-exe
       CiphFun
     , QuickCheck ==2.14.2
     , base >=4.7 && <5
+    , bytestring ==0.10.12.0
     , hspec ==2.7.8
     , mtl ==2.2.2
     , optparse-applicative ==0.15.1.0
@@ -80,6 +82,7 @@ test-suite CiphFun-test
       CiphFun
     , QuickCheck ==2.14.2
     , base >=4.7 && <5
+    , bytestring ==0.10.12.0
     , hspec ==2.7.8
     , mtl ==2.2.2
     , optparse-applicative ==0.15.1.0

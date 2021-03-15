@@ -1,7 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
 import Options.Applicative
 import Data.Semigroup ((<>))
+import Data.Yaml (decodeEither', ParseException, FromJSON)
+import qualified Data.ByteString as BL
 
 import RailFence
 import CodeWord
@@ -69,10 +72,26 @@ printResult :: Show a => Either String a -> IO ()
 printResult (Left err) = print $ "Error! " ++ err
 printResult (Right msg) = print msg
 
+parseRFConfig :: (FromJSON a) => String -> IO (Either String a)
+parseRFConfig configPath = do
+  contents <- BL.readFile configPath
+  let res = decodeEither' contents
+  return $ case res of
+    Left err -> Left (show err)
+    Right config -> Right config
+
 -- runCommand runs the cipher based on the options.
 runCommand :: CliOptions -> IO ()
-runCommand (CliOptions Encode RailFence _ msg) = printResult $ unwords <$> encode standardRailFenceConfig msg
-runCommand (CliOptions Decode RailFence _ msg) = printResult $ decode standardRailFenceConfig $ words msg
-runCommand (CliOptions Encode CodeWord _ msg) = printResult $ unwords <$> encode standardCodeWordConfig msg
-runCommand (CliOptions Decode CodeWord _ msg) = printResult $ decode standardCodeWordConfig $ words msg
+runCommand (CliOptions Encode RailFence configFile msg) = do
+  (config :: Either String RailFenceConfig) <- parseRFConfig configFile
+  printResult $ unwords <$> (flip encode msg =<< config)
+runCommand (CliOptions Decode RailFence configFile msg) = do
+  (config :: Either String RailFenceConfig) <- parseRFConfig configFile
+  printResult $ flip decode (words msg) =<< config
+runCommand (CliOptions Encode CodeWord configFile msg) = do
+  (config :: Either String CodeWordConfig) <- parseRFConfig configFile
+  printResult $ unwords <$> (flip encode msg =<< config)
+runCommand (CliOptions Decode CodeWord configFile msg) = do
+  (config :: Either String CodeWordConfig) <- parseRFConfig configFile
+  printResult $ flip decode (words msg) =<< config
 runCommand x = print x
