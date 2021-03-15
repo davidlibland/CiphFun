@@ -67,11 +67,12 @@ main = runCommand =<< execParser opts
      <> progDesc "Encode or decode a message using a cipher"
      <> header "CiphFun - a cli to use playful ciphers" )
 
---
+-- Prints a result or an error message
 printResult :: Show a => Either String a -> IO ()
 printResult (Left err) = print $ "Error! " ++ err
 printResult (Right msg) = print msg
 
+-- Just parses a yaml config to the desired config datum.
 parseRFConfig :: (FromJSON a) => String -> IO (Either String a)
 parseRFConfig configPath = do
   contents <- BL.readFile configPath
